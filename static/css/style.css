@@ -116,15 +116,8 @@ header {
 }
 
 main {
-  /* grid-column: 2 / 3;
-    grid-row: 2 / 3; */
-  /* display: grid; */
-  /* gap: 20px; */
   overflow-y: auto;
-
   overflow-x: hidden;
-  /* grid-area: main; */
-  /* padding: 25px; */
 }
 
 .card {
