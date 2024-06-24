@@ -3,8 +3,7 @@
   background-image: url("../img/obra_bg.png");
 }
 
-.login,
-.forgot {
+.center-card {
   height: 100vh;
   width: 100vw;
   display: flex;
