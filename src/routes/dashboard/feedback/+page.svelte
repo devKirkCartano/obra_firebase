@@ -89,7 +89,7 @@
 
   <nav class="icons">
     <ul>
-      <a href="/dashboard">
+      <a href="../dashboard">
         <li class="ps-3">
           <div class="rounded" width="50px" height="50px">
             <svg
