@@ -87,7 +87,7 @@
 
 /* Dashboard */
 
-body {
+.body {
   color: white;
   height: 100vh;
   display: grid;
