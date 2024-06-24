@@ -82,7 +82,7 @@
     <h1 class="fw-bold">OBRA</h1>
     <img
       class="position-absolute top-0 start-0"
-      src="../public/assets/img/obra-bg.png"
+      src="./img/obra-brand.png"
       alt=""
     />
   </nav>
