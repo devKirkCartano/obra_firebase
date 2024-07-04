@@ -1,3 +1,9 @@
+<script>
+  function helloworld() {
+    console.log("Hello World");
+  }
+</script>
+
 <header class="d-flex justify-content-end align-items-center">
   <div class="mx-5">
     <span class="mx-3" id="notif-icon">
@@ -14,7 +20,14 @@
         />
       </svg>
     </span>
-    <span class="mx-3 position-relative" id="profile-icon">
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
+    <!-- svelte-ignore a11y-interactive-supports-focus -->
+    <span
+      class="mx-3 position-relative"
+      id="profile-icon"
+      role="button"
+      on:click={helloworld}
+    >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="30"
