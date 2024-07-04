@@ -1,6 +1,9 @@
 :root .overlay {
   background-color: black;
   background-image: url("../img/obra_bg.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .center-card {
