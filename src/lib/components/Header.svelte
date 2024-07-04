@@ -1,6 +1,12 @@
 <script>
-  function helloworld() {
-    console.log("Hello World");
+  let showDropdown = false;
+
+  function toggleDropdown() {
+    showDropdown = !showDropdown;
+    const dropdown = document.querySelector(".dropdown-option");
+    if (dropdown) {
+      dropdown.classList.toggle("d-none", !showDropdown);
+    }
   }
 </script>
 
@@ -26,7 +32,7 @@
       class="mx-3 position-relative"
       id="profile-icon"
       role="button"
-      on:click={helloworld}
+      on:click={toggleDropdown}
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
