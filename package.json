@@ -20,7 +20,10 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"datatables.net": "^2.0.8",
+		"datatables.net-dt": "^2.0.8",
 		"firebase": "^10.12.2",
-		"firebase-admin": "^12.2.0"
+		"firebase-admin": "^12.2.0",
+		"jquery": "^3.7.1"
 	}
 }
