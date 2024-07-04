@@ -1,44 +1,37 @@
 <script>
-  import { auth } from "$lib/firebase"; // Adjust the import path as needed
-  import { signInWithEmailAndPassword } from "firebase/auth";
-  import { onMount } from "svelte";
+  // @ts-ignore
+  import { authStore, authHandlers } from '../store/store';
+  import { goto } from '$app/navigation';
+  // @ts-ignore
+  import { get } from 'svelte/store';
 
-  let email = "";
-  let password = "";
-  let message = "";
-  let alertType = "";
+  let email = '';
+  let password = '';
+  let message = '';
+  let alertType = '';
 
+  // @ts-ignore
   function showMessage(msg, type) {
     message = msg;
     alertType = type;
     setTimeout(() => {
-      message = "";
-      alertType = "";
+      message = '';
+      alertType = '';
     }, 5000); // Hide message after 5 seconds
   }
 
+  // @ts-ignore
   async function handleSubmit(event) {
     event.preventDefault();
     try {
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      const user = userCredential.user;
-      console.log(user);
-
-      showMessage("Login successful", "alert-success");
-
-      // Optional: Redirect or perform additional actions after successful login
-      // For example: navigate to another page
-      window.location.href = "/dashboard";
+      await authHandlers.login(email, password);
+      showMessage('Login successful', 'alert-success');
+      goto('/dashboard');
     } catch (error) {
-      const errorCode = error.code;
+      // @ts-ignore
       const errorMessage = error.message;
-      console.error(errorCode, errorMessage);
-
-      showMessage(errorMessage, "alert-danger");
+      console.error(errorMessage);
+      showMessage(errorMessage, 'alert-danger');
     }
   }
 </script>

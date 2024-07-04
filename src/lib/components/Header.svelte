@@ -1,4 +1,6 @@
 <script>
+  import {authHandlers} from '../../store/store'
+
   let showDropdown = false;
 
   function toggleDropdown() {
@@ -51,7 +53,8 @@
       <div
         class="card dropdown-option position-absolute text-white m-0 px-0 d-none"
       >
-        <div class="d-flex justify-content-center align-items-center item">
+        <!-- svelte-ignore a11y-no-static-element-interactions -->
+        <div class="d-flex justify-content-center align-items-center item"  on:click={authHandlers.logout}>
           <span
             class="d-inline-block ms-3 rounded-circle p-2"
             style="background-color: #22242E;"
@@ -89,6 +92,7 @@
               </defs>
             </svg>
           </span>
+          <!-- svelte-ignore a11y-no-static-element-interactions -->
           <span class="mx-3">Logout</span>
         </div>
       </div>
