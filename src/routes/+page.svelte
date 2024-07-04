@@ -51,6 +51,7 @@
         {/if}
         <form id="login-form" on:submit={handleSubmit}>
           <div class="form-group">
+            <p>test deploy</p>
             <label for="email">Email</label>
             <input
               bind:value={email}
