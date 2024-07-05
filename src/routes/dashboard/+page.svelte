@@ -84,7 +84,33 @@
           </div>
         </div>
       </div>
-      
+      <div class="col-4">
+        <div class="card bg-color text-white p-0 border border-light rounded-3">
+          <div class="card-body p-0">
+            <div class="row">
+              <Image storage={storage} folder="images/basilio gonzales ancestral house" imageName="basilio_gonzales_ancestral_house_1.jpg" /> 
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-4">
+        <div class="card bg-color text-white p-0 border border-light rounded-3">
+          <div class="card-body p-0">
+            <div class="row">
+              <Image storage={storage} folder="images/basilio gonzales y barroma" imageName="basilio.jpg" /> 
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-4">
+        <div class="card bg-color text-white p-0 border border-light rounded-3">
+          <div class="card-body p-0">
+            <div class="row">
+              <Image storage={storage} folder="images/bayoneta" imageName="bayoneta_1.jpg" /> 
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </main>
