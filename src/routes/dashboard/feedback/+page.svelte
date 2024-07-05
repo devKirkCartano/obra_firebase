@@ -43,7 +43,7 @@ onMount(async () => {
       // @ts-ignore
       users.forEach(user => {
         table.row.add([
-          user.id, // Add document ID
+          // user.id, // Add document ID
           `${user.firstName} ${user.lastName}`,
           user.address,
           user.email,
@@ -72,7 +72,7 @@ onMount(async () => {
             <table id="feedback" class="display" style="width:100%">
               <thead>
                 <tr>
-                  <th>User ID</th>
+                  <!-- <th>User ID</th> -->
                   <th>Name</th>
                   <th>Address / School</th>
                   <th>Email</th>
