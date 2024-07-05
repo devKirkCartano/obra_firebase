@@ -86,7 +86,7 @@
   <div class="dashboard-bottom">
     <div class="row">
       <div class="col-12">
-        <div class="card">
+        <div class="card bg-color text-white">
           <div class="card-body">
             <table id="feedback" class="display" style="width:100%">
               <thead>
