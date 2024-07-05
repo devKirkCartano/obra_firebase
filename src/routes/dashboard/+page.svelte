@@ -57,6 +57,34 @@
           </div>
         </div>
       </div>
+      <div class="col-4">
+        <div class="card bg-color text-white p-0 border border-light rounded-3">
+          <div class="card-body p-0">
+            <div class="row">
+              <Image storage={storage} folder="images/angel zavalla" imageName="angel.jpg" /> 
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-4">
+        <div class="card bg-color text-white p-0 border border-light rounded-3">
+          <div class="card-body p-0">
+            <div class="row">
+              <Image storage={storage} folder="images/arcadio arambulo" imageName="arcadio.jpg" /> 
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-4">
+        <div class="card bg-color text-white p-0 border border-light rounded-3">
+          <div class="card-body p-0">
+            <div class="row">
+              <Image storage={storage} folder="images/bahay kubo" imageName="bahay_kubo_3.jpg" /> 
+            </div>
+          </div>
+        </div>
+      </div>
+      
     </div>
   </div>
 </main>
