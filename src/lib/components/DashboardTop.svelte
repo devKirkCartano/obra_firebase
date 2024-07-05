@@ -1,10 +1,57 @@
+<script>
+  import { db } from '$lib/firebase';
+  import { collection, getDocs } from 'firebase/firestore';
+  import { onMount } from 'svelte';
+
+  let userCount = 0;
+  let feedbackCount = 0;
+
+  async function fetchUserCount() {
+    const usersRef = collection(db, 'users');
+    
+    try {
+      const querySnapshot = await getDocs(usersRef);
+      
+      // Filter out the user with ID 'user_1'
+      const filteredUsers = querySnapshot.docs.filter(doc => doc.id !== 'user_1');
+      
+      // Get the count of filtered users
+      userCount = filteredUsers.length;
+      
+      console.log("User count: ", userCount);
+    } catch (error) {
+      console.error('Error fetching users: ', error);
+    }
+  }
+
+  async function fetchFeedbackCount() {
+    const feedbackRef = collection(db, 'feedback');
+    
+    try {
+      const querySnapshot = await getDocs(feedbackRef);
+      
+      // Get the count of feedback documents
+      feedbackCount = querySnapshot.size;
+      
+      console.log("Feedback count: ", feedbackCount);
+    } catch (error) {
+      console.error('Error fetching feedback: ', error);
+    }
+  }
+
+  onMount(() => {
+    fetchUserCount();
+    fetchFeedbackCount();
+  });
+</script>
+
 <div class="dashboard-top">
   <div class="row">
     <div class="col-4">
       <div class="card bg-color text-white">
         <div class="card-body">
           <div class="d-flex justify-content-between align-items-center">
-            <p class="fs-1 fw-bold m-0">143</p>
+            <p class="fs-1 fw-bold m-0">{userCount}</p>
             <div
               class="d-flex justify-content-center align-items-center rounded icon-week"
             >
@@ -35,7 +82,7 @@
       <div class="card bg-color text-white">
         <div class="card-body">
           <div class="d-flex justify-content-between align-items-center">
-            <p class="fs-1 fw-bold m-0">143</p>
+            <p class="fs-1 fw-bold m-0">{userCount}</p>
             <div
               class="d-flex justify-content-center align-items-center rounded icon-month"
             >
@@ -66,7 +113,7 @@
       <div class="card bg-color text-white">
         <div class="card-body">
           <div class="d-flex justify-content-between align-items-center">
-            <p class="fs-1 fw-bold m-0">143</p>
+            <p class="fs-1 fw-bold m-0">{feedbackCount}</p>
             <div
               class="d-flex justify-content-center align-items-center rounded icon-feedback"
             >
