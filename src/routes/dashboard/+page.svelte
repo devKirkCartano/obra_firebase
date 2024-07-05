@@ -1,27 +1,25 @@
 <script>
   import DashboardTop from "$lib/components/DashboardTop.svelte";
   import Header from "$lib/components/Header.svelte";
+  import Image from '$lib/components/Image.svelte';
   import Sidebar from "$lib/components/Sidebar.svelte";
   import { storage } from "$lib/firebase";
-  import { getDownloadURL, ref } from "firebase/storage";
-  import { onMount } from "svelte";
-  import { writable } from "svelte/store";
  // Ensure this import is correctly set
 
   // Store for the image URL
-  const imageUrl = writable("");
+  // const imageUrl = writable("");
 
-  onMount(async () => {
-    const imageName = "almires_3.jpg";
-    const storageRef = ref(storage, `images/almires/${imageName}`);
+  // onMount(async () => {
+  //   const imageName = "almires_3.jpg";
+  //   const storageRef = ref(storage, `images/almires/${imageName}`);
 
-    try {
-      const url = await getDownloadURL(storageRef);
-      imageUrl.set(url);
-    } catch (error) {
-      console.error(`Error fetching image ${imageName}:`, error);
-    }
-  });
+  //   try {
+  //     const url = await getDownloadURL(storageRef);
+  //     imageUrl.set(url);
+  //   } catch (error) {
+  //     console.error(`Error fetching image ${imageName}:`, error);
+  //   }
+  // });
 </script>
 
 <Header />
@@ -35,16 +33,27 @@
       <div class="col-4">
         <div class="card bg-color text-white p-0 border border-light rounded-3">
           <div class="card-body p-0">
-            {#if $imageUrl}
-              <img
-                class="rounded-3"
-                alt="almires_3"
-                style="width: 100%; height: 300px;"
-                src="{$imageUrl}"
-              />
-            {:else}
-              <p>Loading...</p>
-            {/if}
+            <div class="row">
+              <Image storage={storage} folder="images/almires" imageName="almires_3.jpg" /> 
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-4">
+        <div class="card bg-color text-white p-0 border border-light rounded-3">
+          <div class="card-body p-0">
+            <div class="row">
+              <Image storage={storage} folder="images/ancestral houses" imageName="ancestral_houses_1.png" /> 
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-4">
+        <div class="card bg-color text-white p-0 border border-light rounded-3">
+          <div class="card-body p-0">
+            <div class="row">
+              <Image storage={storage} folder="images/makinilya" imageName="makinilya_2.png" /> 
+            </div>
           </div>
         </div>
       </div>
