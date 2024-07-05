@@ -1,18 +1,57 @@
 <script>
-  import { page } from "$app/stores";
   import { onMount } from "svelte";
-  import jQuery from "jquery"; // Import jQuery with a different name
+  // @ts-ignore
+  import jQuery from "jquery";
+// Import jQuery with a different name
   import "datatables.net";
-  import "datatables.net-dt/css/dataTables.dataTables.css"; // Ensure correct path and filename
-  import Sidebar from "$lib/components/Sidebar.svelte";
-  import Header from "$lib/components/Header.svelte";
+  import "datatables.net-dt/css/dataTables.dataTables.css";
+// Ensure correct path and filename
+  import { db } from "$lib/firebase";
+// Import the initialized Firestore instance
   import DashboardTop from "$lib/components/DashboardTop.svelte";
+  import Header from "$lib/components/Header.svelte";
+// @ts-ignore
+  import Sidebar from "$lib/components/Sidebar.svelte";
+  import "datatables.net";
+  import "datatables.net-dt/css/dataTables.dataTables.css";
+  import { collection, getDocs } from "firebase/firestore";
 
-  onMount(() => {
-    // Initialize DataTable once the component is mounted
-    jQuery(document).ready(function () {
-      jQuery("#feedback").DataTable();
-    });
+  // @ts-ignore
+  let users = [];
+
+  onMount(async () => {
+    try {
+      // Fetch data from Firestore
+      const querySnapshot = await getDocs(collection(db, "users"));
+      users = querySnapshot.docs.map(doc => ({
+        id: doc.id, // Include document ID
+        ...doc.data()
+      }));
+
+      // Initialize DataTable once the data is fetched
+      jQuery(document).ready(function () {
+        const table = jQuery("#feedback").DataTable();
+        
+        // @ts-ignore
+        console.log(users)
+        // Clear the table first
+        table.clear();
+
+        // Add the new data
+        // @ts-ignore
+        users.forEach(user => {
+          table.row.add([
+            user.id, // Add document ID
+            `${user.firstName} ${user.lastName}`,
+            user.address || user.school || '',
+            user.email,
+            // new Date(user.timestamp).toLocaleString()
+          ]).draw(false);
+        });
+      });
+    } catch (error) {
+      console.error("Error fetching users: ", error);
+    }
   });
 </script>
 
@@ -34,52 +73,11 @@
                   <th>Name</th>
                   <th>Address / School</th>
                   <th>Email</th>
-                  <th>Date / Time</th>
+                  <!-- <th>Date / Time</th> -->
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>Tiger Nixon</td>
-                  <td>System Architect</td>
-                  <td>Edinburgh</td>
-                  <td>61</td>
-                  <td>2011-04-25</td>
-                </tr>
-                <tr>
-                  <td>Garrett Winters</td>
-                  <td>Accountant</td>
-                  <td>Tokyo</td>
-                  <td>63</td>
-                  <td>2011-07-25</td>
-                </tr>
-                <tr>
-                  <td>Ashton Cox</td>
-                  <td>Junior Technical Author</td>
-                  <td>San Francisco</td>
-                  <td>66</td>
-                  <td>2009-01-12</td>
-                </tr>
-                <tr>
-                  <td>Cedric Kelly</td>
-                  <td>Senior Javascript Developer</td>
-                  <td>Edinburgh</td>
-                  <td>22</td>
-                  <td>2012-03-29</td>
-                </tr>
-                <tr>
-                  <td>Airi Satou</td>
-                  <td>Accountant</td>
-                  <td>Tokyo</td>
-                  <td>33</td>
-                  <td>2008-11-28</td>
-                </tr>
-                <tr>
-                  <td>Donna Snider</td>
-                  <td>Customer Support</td>
-                  <td>New York</td>
-                  <td>27</td>
-                  <td>2011-01-25</td>
-                </tr>
+                <!-- DataTable will populate this -->
               </tbody>
             </table>
           </div>
