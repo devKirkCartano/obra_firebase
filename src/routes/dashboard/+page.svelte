@@ -123,19 +123,6 @@
             <div class="row">
               <Image
                 {storage}
-                folder="images/la mesa de officina"
-                imageName="la_mesa_de_officina_(office_desk)_1.png"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-4">
-        <div class="card bg-color text-white p-0 border border-light rounded-3">
-          <div class="card-body p-0">
-            <div class="row">
-              <Image
-                {storage}
                 folder="images/makinilya"
                 imageName="makinilya_2.png"
               />
