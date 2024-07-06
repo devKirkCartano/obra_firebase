@@ -2,14 +2,16 @@
   import { onMount } from "svelte";
   import DashboardTop from "$lib/components/DashboardTop.svelte";
   import Header from "$lib/components/Header.svelte";
+  import Sidebar from "$lib/components/Sidebar.svelte";
   import { db } from "$lib/firebase";
   import "datatables.net";
   import "datatables.net-dt/css/dataTables.dataTables.css";
   // @ts-ignore
+  // @ts-ignore
   import jQuery from "jquery";
-  import Sidebar from "$lib/components/Sidebar.svelte";
   import { collection, onSnapshot } from "firebase/firestore";
 
+  // @ts-ignore
   let users = [];
   // @ts-ignore
   let table;
@@ -29,14 +31,34 @@
       });
 
       // Make rows clickable
+      // Make rows clickable
       jQuery("#feedback tbody").on("click", "tr", function () {
         // @ts-ignore
         const data = table.row(this).data();
+        const userEmail = data[2];
+
+        // Find the specific user in your array
         // @ts-ignore
-        document.getElementById("name").textContent = `Name: ${data[0]}`;
+        const specificUser = users.find((user) => user.email === userEmail);
+        console.log(specificUser);
+        // Update modal content
         // @ts-ignore
-        document.getElementById("email").textContent = `Email: ${data[2]}`;
-        console.log(data[2]);
+        document.getElementById("modal-name").textContent = `Name: ${data[0]}`;
+        // @ts-ignore
+        document.getElementById("modal-email").textContent =
+          `Email: ${data[2]}`;
+
+        console.log(specificUser.rating);
+        // @ts-ignore
+        document.getElementById("modal-rating").textContent = `Rating: ${
+          specificUser["rating "] || "No rating available"
+        }`;
+        // @ts-ignore
+        document.getElementById("modal-feedback").textContent = `Feedback: ${
+          specificUser.feedback || "No feedback available"
+        }`;
+
+        // Show the modal
         // @ts-ignore
         const modal = new bootstrap.Modal(
           document.getElementById("exampleModal")
@@ -46,6 +68,7 @@
     });
   }
 
+  // Function to update DataTable with users data
   // @ts-ignore
   function updateDataTable(users) {
     // @ts-ignore
@@ -55,13 +78,12 @@
       // @ts-ignore
       users.forEach((user) => {
         if (user.email !== "obrasantarosa07@gmail.com") {
-          // Exclude specific email
           // @ts-ignore
           table.row
             .add([
               `${user.firstName} ${user.lastName}`,
-              user.address,
-              user.email,
+              user.address || "N/A",
+              user.email || "N/A",
             ])
             .draw(false);
         }
@@ -70,10 +92,11 @@
   }
 
   onMount(() => {
+    // Initialize DataTable
     initializeDataTable();
 
+    // Fetch users from Firestore
     const usersRef = collection(db, "users");
-
     const unsubscribe = onSnapshot(
       usersRef,
       (querySnapshot) => {
@@ -88,6 +111,7 @@
       }
     );
 
+    // Clean up listener on component unmount
     return () => {
       unsubscribe();
     };
@@ -133,7 +157,7 @@
     <div class="modal-dialog">
       <div class="modal-content bg-color text-white">
         <div class="modal-header justify-content-center">
-          <h1 class="modal-title fs-5" id="">Feedback Form</h1>
+          <h1 class="modal-title fs-5">Feedback Details</h1>
           <button
             type="button"
             class="btn-close"
@@ -141,19 +165,28 @@
             aria-label="Close"
           ></button>
         </div>
-        <div class="modal-body text-white">
-          <p id="name"></p>
-          <p id="email"></p>
-          <p>Feedback</p>
+        <div class="modal-body">
+          <p id="modal-name"></p>
+          <p id="modal-email"></p>
+          <p id="modal-rating"></p>
+          <p id="modal-feedback"></p>
         </div>
         <div class="modal-footer">
           <button
             type="button"
             class="btn btn-secondary"
-            data-bs-dismiss="modal">Close</button
+            data-bs-dismiss="modal"
           >
+            Close
+          </button>
         </div>
       </div>
     </div>
   </div>
 </main>
+
+<style>
+  .text-center {
+    text-align: center;
+  }
+</style>
