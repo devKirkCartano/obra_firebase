@@ -8,22 +8,28 @@
   let loadingUsers = true;
   let loadingFeedback = true;
 
-  function fetchUserCount() {
+  function fetchCounts() {
     const usersRef = collection(db, "users");
 
-    // Set up a real-time listener
+    // Set up a real-time listener for users
     const unsubscribeUsers = onSnapshot(
       usersRef,
       (querySnapshot) => {
-        // Filter out the user with ID 'user_1'
-        const filteredUsers = querySnapshot.docs.filter(
-          (doc) => doc.id !== "user_1"
+        // Filter users where feedback is not empty and email is not "obrasantarosa07@gmail.com"
+        const usersWithFeedback = querySnapshot.docs.filter(
+          (doc) => doc.data().feedback && doc.data().feedback.trim().length > 0 && doc.data().email !== "obrasantarosa07@gmail.com"
         );
 
-        // Get the count of filtered users
-        userCount = filteredUsers.length;
+        // Get total user count excluding the specific email
+        userCount = querySnapshot.size - 1; // Subtract 1 for the excluded user
+
+        // Count users with non-empty feedback excluding the specific email
+        feedbackCount = usersWithFeedback.length;
+
         loadingUsers = false;
+        loadingFeedback = false;
         console.log("User count: ", userCount);
+        console.log("Feedback count: ", feedbackCount);
       },
       (error) => {
         console.error("Error fetching users: ", error);
@@ -33,34 +39,12 @@
     return unsubscribeUsers; // Return the unsubscribe function
   }
 
-  function fetchFeedbackCount() {
-    const feedbackRef = collection(db, "feedback");
-
-    // Set up a real-time listener
-    const unsubscribeFeedback = onSnapshot(
-      feedbackRef,
-      (querySnapshot) => {
-        // Get the count of feedback documents
-        feedbackCount = querySnapshot.size;
-        loadingFeedback = false;
-        console.log("Feedback count: ", feedbackCount);
-      },
-      (error) => {
-        console.error("Error fetching feedback: ", error);
-      }
-    );
-
-    return unsubscribeFeedback; // Return the unsubscribe function
-  }
-
   onMount(() => {
-    const unsubscribeUsers = fetchUserCount();
-    const unsubscribeFeedback = fetchFeedbackCount();
+    const unsubscribeUsers = fetchCounts();
 
     // Clean up listeners on component destroy
     return () => {
       unsubscribeUsers();
-      unsubscribeFeedback();
     };
   });
 </script>

@@ -9,7 +9,7 @@
   import jQuery from "jquery";
   import Sidebar from "$lib/components/Sidebar.svelte";
   import { collection, onSnapshot } from "firebase/firestore";
-  
+
   let users = [];
   // @ts-ignore
   let table;
@@ -20,19 +20,27 @@
         columns: [
           { title: "Name" },
           { title: "Address / School" },
-          { title: "Email" }
-        ]
+          { title: "Email" },
+        ],
+        // @ts-ignore
+        createdRow: function (row) {
+          jQuery(row).addClass("text-center");
+        },
       });
 
       // Make rows clickable
-      jQuery('#feedback tbody').on('click', 'tr', function () {
+      jQuery("#feedback tbody").on("click", "tr", function () {
         // @ts-ignore
         const data = table.row(this).data();
         // @ts-ignore
-        document.getElementById('exampleModalLabel').textContent = `${data[0]}`;
-        
+        document.getElementById("name").textContent = `Name: ${data[0]}`;
         // @ts-ignore
-        const modal = new bootstrap.Modal(document.getElementById('exampleModal'));
+        document.getElementById("email").textContent = `Email: ${data[2]}`;
+        console.log(data[2]);
+        // @ts-ignore
+        const modal = new bootstrap.Modal(
+          document.getElementById("exampleModal")
+        );
         modal.show();
       });
     });
@@ -43,14 +51,20 @@
     // @ts-ignore
     if (table) {
       table.clear();
+
       // @ts-ignore
-      users.forEach(user => {
-        // @ts-ignore
-        table.row.add([
-          `${user.firstName} ${user.lastName}`,
-          user.address,
-          user.email
-        ]).draw(false);
+      users.forEach((user) => {
+        if (user.email !== "obrasantarosa07@gmail.com") {
+          // Exclude specific email
+          // @ts-ignore
+          table.row
+            .add([
+              `${user.firstName} ${user.lastName}`,
+              user.address,
+              user.email,
+            ])
+            .draw(false);
+        }
       });
     }
   }
@@ -59,18 +73,20 @@
     initializeDataTable();
 
     const usersRef = collection(db, "users");
-    
-    const unsubscribe = onSnapshot(usersRef, (querySnapshot) => {
-      users = querySnapshot.docs
-        .filter(doc => doc.id !== 'user_1')
-        .map(doc => ({
+
+    const unsubscribe = onSnapshot(
+      usersRef,
+      (querySnapshot) => {
+        users = querySnapshot.docs.map((doc) => ({
           id: doc.id,
-          ...doc.data()
+          ...doc.data(),
         }));
-      updateDataTable(users);
-    }, (error) => {
-      console.error("Error fetching users: ", error);
-    });
+        updateDataTable(users);
+      },
+      (error) => {
+        console.error("Error fetching users: ", error);
+      }
+    );
 
     return () => {
       unsubscribe();
@@ -91,9 +107,9 @@
             <table id="feedback" class="display" style="width:100%">
               <thead>
                 <tr>
-                  <th>Name</th>
-                  <th>Address / School</th>
-                  <th>Email</th>
+                  <th class="text-center">Name</th>
+                  <th class="text-center">Address / School</th>
+                  <th class="text-center">Email</th>
                 </tr>
               </thead>
               <tbody>
@@ -107,21 +123,37 @@
   </div>
 
   <!-- Modal -->
-  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div
+    class="modal fade"
+    id="exampleModal"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
     <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      <div class="modal-content bg-color text-white">
+        <div class="modal-header justify-content-center">
+          <h1 class="modal-title fs-5" id="">Feedback Form</h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
         </div>
-        <div class="modal-body text-black">
-          <p>Name: </p>
+        <div class="modal-body text-white">
+          <p id="name"></p>
+          <p id="email"></p>
+          <p>Feedback</p>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal">Close</button
+          >
         </div>
       </div>
     </div>
   </div>
 </main>
-
