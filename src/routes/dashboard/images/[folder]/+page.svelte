@@ -1,10 +1,14 @@
 <script>
   import DashboardTop from "$lib/components/DashboardTop.svelte";
   import Header from "$lib/components/Header.svelte";
-  // @ts-ignore
-  import Image from "$lib/components/Image.svelte";
   import Sidebar from "$lib/components/Sidebar.svelte";
-  import { getStorage, ref, listAll, getDownloadURL } from "firebase/storage";
+  import {
+    getStorage,
+    ref,
+    listAll,
+    getDownloadURL,
+    uploadBytes,
+  } from "firebase/storage";
 
   import { onMount } from "svelte";
 
@@ -15,36 +19,24 @@
    * @type {any[]}
    */
   let images = []; // Array to store fetched image URLs
+  let fileContent = "";
 
-  onMount(() => {
-    // Get the current path
+  onMount(async () => {
     currentPath = window.location.pathname;
-
-    // Get the last segment after splitting the path by '/'
     let segments = currentPath.split("/");
     lastSegment = segments[segments.length - 1];
-
-    // Decode the last segment to handle spaces
     lastSegment = decodeURIComponent(lastSegment);
 
     const storage = getStorage();
     const storageRef = ref(storage, `images/${lastSegment}`);
-    console.log("Storage Ref:", storageRef);
-    // List all items (images) in the folder
+
     listAll(storageRef)
       .then(async (res) => {
-        // Process each image item
         for (const imageRef of res.items) {
           try {
-            // Get the download URL for each image
             const imageUrl = await getDownloadURL(imageRef);
-            console.log("Image URL:", imageUrl);
-
-            // Push imageUrl into images array
             // @ts-ignore
             images = [...images, imageUrl];
-
-            // Svelte reactivity triggers UI update automatically
           } catch (error) {
             console.error("Error fetching image URL:", error);
           }
@@ -53,7 +45,31 @@
       .catch((error) => {
         console.error("Error listing images:", error);
       });
+
+    const fileRef = ref(storage, `descriptions/${lastSegment}.txt`);
+    const fileUrl = await getDownloadURL(fileRef);
+    const response = await fetch(fileUrl);
+    fileContent = await response.text();
   });
+
+  // @ts-ignore
+  async function handleFileUpload(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const storage = getStorage();
+    const storageRef = ref(storage, `images/${lastSegment}/${file.name}`);
+
+    try {
+      await uploadBytes(storageRef, file);
+      console.log("File uploaded successfully");
+      const imageUrl = await getDownloadURL(storageRef);
+      // @ts-ignore
+      images = [...images, imageUrl];
+    } catch (error) {
+      console.error("Error uploading file:", error);
+    }
+  }
 </script>
 
 <Header />
@@ -67,23 +83,26 @@
       <div class="col">
         <div class="card bg-color" style="max-height: 100%; overflow-y: auto;">
           <div>
-            <!-- Display fetched images in the first column -->
             {#each images as imageUrl}
               <!-- svelte-ignore a11y-img-redundant-alt -->
               <img
-                class="  rounded-4"
+                class="rounded-4"
                 src={imageUrl}
                 alt="Image"
                 style="width: 50%; height: 250px;"
               />
             {/each}
           </div>
-          <input type="file" class="form-control">
+          <input
+            type="file"
+            class="form-control"
+            on:change={handleFileUpload}
+          />
         </div>
       </div>
       <div class="col">
         <div class="card bg-color text-white">
-          <!-- Placeholder for description or other content -->
+          <pre>{fileContent}</pre>
           <p>
             This column is for description or other content related to images.
           </p>
