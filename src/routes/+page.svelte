@@ -1,38 +1,63 @@
 <script>
   // @ts-ignore
-  import { authStore, authHandlers } from '../store/store';
-  import { goto } from '$app/navigation';
+  import { authStore, authHandlers } from "../store/store";
+  import { goto } from "$app/navigation";
   // @ts-ignore
-  import { get } from 'svelte/store';
+  import { get } from "svelte/store";
 
-  let email = '';
-  let password = '';
-  let message = '';
-  let alertType = '';
+  let email = "";
+  let password = "";
+  let message = "";
+  let alertType = "";
 
-  // @ts-ignore
-  function showMessage(msg, type) {
-    message = msg;
-    alertType = type;
-    setTimeout(() => {
-      message = '';
-      alertType = '';
-    }, 5000); // Hide message after 5 seconds
+  // Function to handle input validation for email
+  function handleEmailInput(event) {
+    let value = event.target.value;
+
+    // Remove non-letter, non-number, and non-allowed characters
+    value = value.replace(/[^A-Za-z0-9@.-]/g, "");
+
+    // Remove spaces at the beginning and hyphen at the beginning
+    value = value.replace(/^\s+/, "").replace(/^-/, "");
+
+    // Limit the length if needed
+    const maxLength = 50; // Set the desired maximum length
+    if (value.length > maxLength) {
+      value = value.slice(0, maxLength);
+    }
+
+    // Prevent spaces
+    value = value.replace(/\s/g, "");
+
+    // Prevent .c0 and .C0
+    value = value.replace(/\.c0/gi, ".c"); // Replace '.c0' or '.C0' with '.c'
+
+    // Update the email value
+    email = value;
   }
 
-  // @ts-ignore
+  // Function to handle form submission
   async function handleSubmit(event) {
     event.preventDefault();
     try {
       await authHandlers.login(email, password);
-      showMessage('Login successful', 'alert-success');
-      goto('/dashboard');
+      showMessage("Login successful", "alert-success");
+      goto("/dashboard");
     } catch (error) {
-      // @ts-ignore
       const errorMessage = error.message;
       console.error(errorMessage);
-      showMessage(errorMessage, 'alert-danger');
+      showMessage(errorMessage, "alert-danger");
     }
+  }
+
+  // Function to display messages
+  function showMessage(msg, type) {
+    message = msg;
+    alertType = type;
+    setTimeout(() => {
+      message = "";
+      alertType = "";
+    }, 5000); // Hide message after 5 seconds
   }
 </script>
 
@@ -59,6 +84,7 @@
               id="email"
               name="email"
               required
+              on:input={handleEmailInput}
             />
           </div>
           <div class="form-group py-5">
