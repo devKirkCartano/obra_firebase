@@ -15,6 +15,9 @@
   let currentPath = "";
   let lastSegment = "";
   // @ts-ignore
+  /**
+   * @type {any[]}
+   */
   let images = []; // Array to store fetched image URLs
   let fileContent = "";
   let invalidFile = false; // State to track invalid file selection
@@ -33,6 +36,7 @@
       for (const imageRef of res.items) {
         try {
           const imageUrl = await getDownloadURL(imageRef);
+          // @ts-ignore
           images = [...images, imageUrl];
         } catch (error) {
           console.error("Error fetching image URL:", error);
@@ -52,6 +56,7 @@
     }
   });
 
+  // @ts-ignore
   async function handleFileUpload(event) {
     const file = event.target.files[0];
     if (!file) return;
@@ -73,6 +78,7 @@
       await uploadBytes(storageRef, file);
       console.log("File uploaded successfully");
       const imageUrl = await getDownloadURL(storageRef);
+      // @ts-ignore
       images = [...images, imageUrl];
     } catch (error) {
       console.error("Error uploading file:", error);

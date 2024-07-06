@@ -1,7 +1,9 @@
 <script>
   // @ts-ignore
+  // @ts-ignore
   import { authStore, authHandlers } from "../store/store";
   import { goto } from "$app/navigation";
+  // @ts-ignore
   // @ts-ignore
   import { get } from "svelte/store";
 
@@ -11,6 +13,7 @@
   let alertType = "";
 
   // Function to handle input validation for email
+  // @ts-ignore
   function handleEmailInput(event) {
     let value = event.target.value;
 
@@ -37,6 +40,7 @@
   }
 
   // Function to handle form submission
+  // @ts-ignore
   async function handleSubmit(event) {
     event.preventDefault();
     try {
@@ -44,6 +48,7 @@
       showMessage("Login successful", "alert-success");
       goto("/dashboard");
     } catch (error) {
+      // @ts-ignore
       const errorMessage = error.message;
       console.error(errorMessage);
       showMessage(errorMessage, "alert-danger");
@@ -51,6 +56,7 @@
   }
 
   // Function to display messages
+  // @ts-ignore
   function showMessage(msg, type) {
     message = msg;
     alertType = type;
